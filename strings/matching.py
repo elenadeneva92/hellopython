@@ -86,4 +86,4 @@ def main():
         print("Index not found")
 
 if __name__ == '__main__':
-    min()
+    main()
