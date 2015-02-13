@@ -127,7 +127,7 @@ class UI:
                 scale_x = transform(0, self.factor)
                 scale_y = transform(max_y, - self.factor)
                 start = points[j-1].as_list(scale_x, scale_y)
-                end = points[j].as_list(transform_x, transform_y)
+                end = points[j].as_list(scale_x, scale_y)
                 pygame.draw.line(screen, color, start, end, 5)
 
         pygame.display.flip()
