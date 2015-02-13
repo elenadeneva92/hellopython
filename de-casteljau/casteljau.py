@@ -92,6 +92,36 @@ def transform(a, b):
     return lambda x: a + x * b
 
 
+class Bezier:
+    """Find Bezier curve points iterating de Casteljau's algorithm"""
+    
+    def init(self):
+        self.points = []
+        self.result = []
+        self.precision = 0
+        self.coef = 0
+
+    def set_points(self, points):
+        """Sets the points to define the curve"""
+        self.points = [points]
+
+    def set_coef(self, coef):
+        """Sets the coeficient to split a line to produce new point"""
+        self.coef = coef
+
+    def set_precision(self, precision):
+        """ Set how many iteration to use de Casteljau's algorithm"""
+        self.precision = precision
+
+    def run(self):
+        if self.result:
+            result = [[]]
+            for i in range(0, self.precision):
+
+        return result
+
+
+
 class UI:
     """Simple ui reading and wriging to console"""
 
