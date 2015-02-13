@@ -53,7 +53,7 @@ class DeCasteljau:
 
     def run(self):
         """Finds all the points from the curve"""
-        for k in range(0, len(self.points[0])):
+        for k in range(0, len(self.points[0]) - 1):
             next_level_points = []
             for i in range(0, len(self.points[k]) - 1):
                 begin_point = self.points[k][i]
@@ -73,12 +73,14 @@ class DeCasteljau:
 
     def get_result(self):
         """Returns the point of the curve"""
-        if self.result:
+        if len(self.result) == 0:
             self.result = []
             for i in range(0, len(self.points)):
                 self.result.append(self.points[i][0])
             for i in range(0, len(self.points)):
                 self.result.append(self.points[self.precision - 1 - i][i])
+
+        print("LLL {}".format(self.result))
         return self.result
 
 
@@ -94,8 +96,7 @@ def transform(a, b):
 
 class Bezier:
     """Find Bezier curve points iterating de Casteljau's algorithm"""
-    
-    def init(self):
+    def __init__(self):
         self.points = []
         self.result = []
         self.precision = 0
@@ -103,7 +104,7 @@ class Bezier:
 
     def set_points(self, points):
         """Sets the points to define the curve"""
-        self.points = [points]
+        self.points = points
 
     def set_coef(self, coef):
         """Sets the coeficient to split a line to produce new point"""
@@ -114,12 +115,23 @@ class Bezier:
         self.precision = precision
 
     def run(self):
-        if self.result:
-            result = [[]]
-            for i in range(0, self.precision):
+        i = 0
+        while i <= 1:
+            algorithm = DeCasteljau()
+            algorithm.set_coef(i)
+            algorithm.set_points(self.points)
+            algorithm.run()
+            points = algorithm.points_after_iteration(len(self.points)-1)
+            point = points[0]
+            self.result.append(point)
+            i += self.precision
+        return self.result
 
-        return result
+    def points_after_iteration(self, i):
+        return self.result
 
+    def iteration_count(self):
+        return 1
 
 
 class UI:
@@ -145,7 +157,7 @@ class UI:
         iteration = self.algorithm.points_after_iteration(0)
         max_x = self.factor * max([item.x_coord for item in iteration])
         max_y = self.factor * max([item.y_coord for item in iteration])
-        size = [max_x, max_y]
+        size = [int(max_x)+10, int(max_y)+10]
 
         pygame.init()
         screen = pygame.display.set_mode(size)
@@ -170,9 +182,8 @@ class UI:
 
 def main():
     """start main"""
-    coef = 0.1
-    algorithm = DeCasteljau()
-    algorithm.set_coef(coef)
+    algorithm = Bezier()
+    algorithm.set_precision(0.01)
     application = UI(algorithm)
     application.read()
     application.write()
